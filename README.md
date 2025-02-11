@@ -1,4 +1,4 @@
-# LocalVocal - Speech AI assistant OBS Plugin
+# LocalVocal - Speech AI assistant OBS Plugin 
 
 <div align="center">
 
