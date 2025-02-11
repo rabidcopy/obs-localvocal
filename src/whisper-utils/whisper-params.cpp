@@ -55,8 +55,8 @@ void apply_whisper_params_defaults_on_settings(obs_data_t *s)
 	whisper_full_params whisper_params_tmp = whisper_full_default_params(
 		whisper_sampling_strategy::WHISPER_SAMPLING_BEAM_SEARCH);
 
-	obs_data_set_default_int(s, "strategy",
-				 whisper_sampling_strategy::WHISPER_SAMPLING_BEAM_SEARCH);
+	// obs_data_set_default_int(s, "strategy", // Removed redundant default setting
+	//			 whisper_sampling_strategy::WHISPER_SAMPLING_BEAM_SEARCH);
 	obs_data_set_default_int(s, "n_threads", whisper_params_tmp.n_threads);
 	obs_data_set_default_int(s, "n_max_text_ctx", whisper_params_tmp.n_max_text_ctx);
 	obs_data_set_default_int(s, "offset_ms", whisper_params_tmp.offset_ms);
@@ -149,8 +149,14 @@ void add_whisper_params_group_properties(obs_properties_t *ppts)
 
 	obs_properties_add_list(g, "strategy", MT_("whisper_sampling_strategy"),
 				OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_INT);
+	obs_property_list_add_int(obs_properties_get(g, "strategy"), MT_("strategy_greedy"),
+								   WHISPER_SAMPLING_STRATEGY::WHISPER_SAMPLING_GREEDY);
+	obs_property_list_add_int(obs_properties_get(g, "strategy"), MT_("strategy_beam_search"),
+								   WHISPER_SAMPLING_STRATEGY::WHISPER_SAMPLING_BEAM_SEARCH);
+
+
 	obs_properties_add_int(g, "n_threads", MT_("n_threads"), 1, 8, 1);
-	obs_properties_add_int(g, "n_max_text_ctx", MT_("n_max_text_ctx"), 1, 100, 1);
+	obs_properties_add_int(g, "n_max_text_ctx", MT_("n_max_text_ctx"), -1, 16384, 1);
 	obs_properties_add_int(g, "offset_ms", MT_("offset_ms"), 0, 10000, 100);
 	obs_properties_add_int(g, "duration_ms", MT_("duration_ms"), 0, 30000, 500);
 	obs_properties_add_bool(g, "whisper_translate", MT_("whisper_translate"));
@@ -168,7 +174,7 @@ void add_whisper_params_group_properties(obs_properties_t *ppts)
 	obs_properties_add_bool(g, "split_on_word", MT_("split_on_word"));
 	obs_properties_add_int(g, "max_tokens", MT_("max_tokens"), 0, 1000, 1);
 	obs_properties_add_bool(g, "debug_mode", MT_("debug_mode"));
-	obs_properties_add_int(g, "audio_ctx", MT_("audio_ctx"), 0, 10, 1);
+	obs_properties_add_int(g, "audio_ctx", MT_("audio_ctx"), 0, 1500, 1);
 	obs_properties_add_bool(g, "tdrz_enable", MT_("tdrz_enable"));
 	obs_properties_add_text(g, "suppress_regex", MT_("suppress_regex"), OBS_TEXT_DEFAULT);
 	obs_properties_add_text(g, "initial_prompt", MT_("initial_prompt"), OBS_TEXT_DEFAULT);
