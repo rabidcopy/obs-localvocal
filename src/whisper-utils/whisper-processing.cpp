@@ -57,6 +57,9 @@ struct whisper_context *init_whisper_context(const std::string &model_path_in,
 		gf);
 
 	struct whisper_context_params cparams = whisper_context_default_params();
+#elif defined(LOCALVOCAL_WITH_VULKAN)
+	cparams.use_gpu = true;
+	obs_log(LOG_INFO, "Using Vulkan for inference");
 #ifdef LOCALVOCAL_WITH_CUDA
 	cparams.use_gpu = true;
 	obs_log(LOG_INFO, "Using CUDA GPU for inference, device %d", cparams.gpu_device);
